@@ -9,6 +9,10 @@
   "author": "Moris Borris / Bird Law, LLP",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "serverless": "^3.23.0",
+  },
+  "devDependencies": {
+    "serverless-fargate-plugin": "^2.0.0"
   }
 }

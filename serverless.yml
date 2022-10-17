@@ -1,0 +1,26 @@
+service: ecs-app
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  # (required) similar to Lambda-containers, images defined within the provider are available to tasks.
+  ecr:
+    images:
+      my-task:
+        path: ./
+        file: Dockerfile
+    subnetIds:
+      - subnet-1234
+  fargate:
+    memory: '0.5GB'
+    cpu: 256
+  #  environment:
+  #    name: value
+    logGroupName: ecs-app-log-group
+    vpc:
+      subnetIds:
+        - subnet-1234
+    tasks:
+      ecs-app:
+        name: ecs-app
+        image: gochenator/ecs-app
