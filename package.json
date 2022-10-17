@@ -1,0 +1,14 @@
+{
+  "name": "testing out Amazon ECS",
+  "version": "1.0.0",
+  "description": "Not in the free tier.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Neckbeard Error: get a life, dimwit\" && exit 1"
+  },
+  "author": "Moris Borris / Bird Law, LLP",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
