@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "serverless": "^3.23.0",
+    "serverless-fargate": "^0.0.10"
   },
   "devDependencies": {
     "serverless-fargate-plugin": "^2.0.0"

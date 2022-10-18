@@ -70,6 +70,152 @@
           ]
         }
       }
+    },
+    "FargateTasksCluster": {
+      "Type": "AWS::ECS::Cluster",
+      "Properties": {
+        "CapacityProviders": [
+          "FARGATE",
+          "FARGATE_SPOT"
+        ],
+        "Tags": []
+      }
+    },
+    "FargateTasksLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "ecs-app-log-group",
+        "Tags": []
+      }
+    },
+    "FargateIamExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "ecs-tasks.amazonaws.com",
+                  "events.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+          "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceEventsRole"
+        ],
+        "Tags": []
+      }
+    },
+    "FargateIamTaskRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "ecs-tasks.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [],
+        "ManagedPolicyArns": [],
+        "Tags": []
+      }
+    },
+    "EcsappTask": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Name": "ecs-app",
+            "Image": "960664710655.dkr.ecr.us-east-1.amazonaws.com/serverless-ecs-app-dev@sha256:e02ee9a219f2a1a63380fe90949f06ebe2cdfa06d9c8c1e320df9db2e16eff16",
+            "Environment": [],
+            "EntryPoint": [
+              "node"
+            ],
+            "Command": [
+              "app.js"
+            ],
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-region": {
+                  "Fn::Sub": "${AWS::Region}"
+                },
+                "awslogs-group": {
+                  "Fn::Sub": "${FargateTasksLogGroup}"
+                },
+                "awslogs-stream-prefix": "fargate"
+              }
+            }
+          }
+        ],
+        "Family": "ecs-app",
+        "NetworkMode": "awsvpc",
+        "ExecutionRoleArn": {
+          "Fn::Sub": "${FargateIamExecutionRole}"
+        },
+        "TaskRoleArn": {
+          "Fn::Sub": "${FargateIamTaskRole}"
+        },
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "Memory": "0.5GB",
+        "Cpu": 256,
+        "Tags": []
+      }
+    },
+    "EcsappService": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Fn::Sub": "${FargateTasksCluster}"
+        },
+        "ServiceName": "ecs-app",
+        "CapacityProviderStrategy": [
+          {
+            "CapacityProvider": "FARGATE",
+            "Weight": 1
+          }
+        ],
+        "DesiredCount": 1,
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 100
+        },
+        "TaskDefinition": {
+          "Fn::Sub": "${EcsappTask}"
+        },
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [],
+            "Subnets": [
+              "subnet-1234"
+            ]
+          }
+        },
+        "PropagateTags": "TASK_DEFINITION",
+        "Tags": []
+      }
     }
   },
   "Outputs": {
@@ -79,6 +225,22 @@
       },
       "Export": {
         "Name": "sls-ecs-app-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "EcsappTaskArn": {
+      "Value": {
+        "Ref": "EcsappTask"
+      },
+      "Export": {
+        "Name": "sls-ecs-app-dev-EcsappTaskArn"
+      }
+    },
+    "EcsappServiceArn": {
+      "Value": {
+        "Ref": "EcsappService"
+      },
+      "Export": {
+        "Name": "sls-ecs-app-dev-EcsappServiceArn"
       }
     }
   }
