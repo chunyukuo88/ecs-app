@@ -12,9 +12,6 @@ plugins:
   - serverless-fargate
 
 fargate:
-  vpc:
-    subnetIds:
-      - subnet-1234
   tasks:
     ecs-app:
       image: app

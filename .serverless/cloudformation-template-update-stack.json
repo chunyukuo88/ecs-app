@@ -145,7 +145,7 @@
         "ContainerDefinitions": [
           {
             "Name": "ecs-app",
-            "Image": "960664710655.dkr.ecr.us-east-1.amazonaws.com/serverless-ecs-app-dev@sha256:e02ee9a219f2a1a63380fe90949f06ebe2cdfa06d9c8c1e320df9db2e16eff16",
+            "Image": "960664710655.dkr.ecr.us-east-1.amazonaws.com/serverless-ecs-app-dev@sha256:2396864eabee91735cc5ea77f525701769279951c29e9bc41e543cc80455b4ee",
             "Environment": [],
             "EntryPoint": [
               "node"
@@ -208,9 +208,7 @@
           "AwsvpcConfiguration": {
             "AssignPublicIp": "DISABLED",
             "SecurityGroups": [],
-            "Subnets": [
-              "subnet-1234"
-            ]
+            "Subnets": []
           }
         },
         "PropagateTags": "TASK_DEFINITION",

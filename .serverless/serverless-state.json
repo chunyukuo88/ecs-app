@@ -12,10 +12,7 @@
             "path": "./",
             "file": "Dockerfile"
           }
-        },
-        "subnetIds": [
-          "subnet-1234"
-        ]
+        }
       },
       "stage": "dev",
       "region": "us-east-1",
@@ -167,7 +164,7 @@
               "ContainerDefinitions": [
                 {
                   "Name": "ecs-app",
-                  "Image": "960664710655.dkr.ecr.us-east-1.amazonaws.com/serverless-ecs-app-dev@sha256:e02ee9a219f2a1a63380fe90949f06ebe2cdfa06d9c8c1e320df9db2e16eff16",
+                  "Image": "960664710655.dkr.ecr.us-east-1.amazonaws.com/serverless-ecs-app-dev@sha256:2396864eabee91735cc5ea77f525701769279951c29e9bc41e543cc80455b4ee",
                   "Environment": [],
                   "EntryPoint": [
                     "node"
@@ -230,9 +227,7 @@
                 "AwsvpcConfiguration": {
                   "AssignPublicIp": "DISABLED",
                   "SecurityGroups": [],
-                  "Subnets": [
-                    "subnet-1234"
-                  ]
+                  "Subnets": []
                 }
               },
               "PropagateTags": "TASK_DEFINITION",
@@ -366,11 +361,6 @@
         "$ref": "$[\"service\"][\"plugins\"]"
       },
       "fargate": {
-        "vpc": {
-          "subnetIds": {
-            "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"EcsappService\"][\"Properties\"][\"NetworkConfiguration\"][\"AwsvpcConfiguration\"][\"Subnets\"]"
-          }
-        },
         "tasks": {
           "ecs-app": {
             "image": "app",
@@ -391,7 +381,7 @@
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
-    "artifactDirectoryName": "serverless/ecs-app/dev/1666061233108-2022-10-18T02:47:13.108Z",
+    "artifactDirectoryName": "serverless/ecs-app/dev/1666063041091-2022-10-18T03:17:21.091Z",
     "artifact": ""
   }
 }
